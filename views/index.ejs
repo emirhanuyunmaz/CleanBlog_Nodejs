@@ -28,7 +28,8 @@
         
         <% for (let i = 0 ; i < blog.length ; i++ ) { %>
         <div class="post-preview">
-          <a href="/">
+          <!-- Parametre olarak url id verilmektedir. -->
+          <a href="/post/<%= blog[i]._id %>">
             <h2 class="post-title">
               <%= blog[i].title %>
             </h2>

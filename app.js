@@ -29,6 +29,12 @@ app.get("/about",(req,res) => {
 app.get("/addpost",(req,res) => {
     res.render("add_post")
 })
+
+app.get("/post/:id", async (req,res) => {
+    console.log(req.params.id)//Bu işlem snoucunda url de gelen id paramtre olarak almış oluruz.
+    const blog = await Blog.find({_id : req.params.id})//Bu işlemde ise arama işlemi yaparız.
+    res.render("post",{blog})//Bu işlem "post" sayfasına parametre olarak bulunan blog verilmiş olur.
+})
 //Burada add_post ile gönderilen işlemleri yakalama işlemi yapmaktayız.
 //Ayrıca ordaki tüm input değerlerine name parametresi mongoose-model ile belirtilen şekilde verilmelidir.
 app.post("/post",async (req,res) => {
