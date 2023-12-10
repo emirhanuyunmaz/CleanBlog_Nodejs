@@ -15,7 +15,6 @@
           <div class="post-heading">
             <!-- Alınan veri dizi olarak geldiği ama bir adet eleman içerdiği için 0. index kullanılmıştır. -->
             <h1><%= blog[0].title %></h1>
-            
             <span class="meta"><%= blog[0].name %></span>
               <p><%=  blog[0].date  %></p>
           </div>
@@ -30,8 +29,15 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <p><%= blog[0].message %></p>
-
-
+        </div>
+        <div class="col-lg-2">
+          <div class="row">
+            <a href="/update/<%= blog[0]._id %>" class="btn btn-primary m-1 px-5 mx-auto">Update</a>
+          </div>
+          <div class="row">
+            <!-- Sona eklenen method bilgisi sayesinde post işlemi delete işlemi olarak işlenir. -->
+            <a href="/post/<%= blog[0]._id %>?_method=DELETE" class="btn btn-danger m-1 px-5 mx-auto" >Delete</a>
+          </div>
         </div>
       </div>
     </div>

@@ -2,7 +2,9 @@ const express = require("express")
 const app = express()
 const path = require("path")
 const ejs = require("ejs")
-const Blog = require("./models/Blog")
+const blogController = require("./controllers/blogController")
+const pageController = require("./controllers/pageController")
+var methodOverride = require('method-override')
 
 //Burada ejs ile .html dosyalarını .ejs çevirerek kullanma işlemi yapmaktayız.
 app.set("view engine" ,"ejs")
@@ -15,33 +17,27 @@ app.use(express.static("public"))
 app.use(express.urlencoded({extended : true}))//Bu işlem url deki datayı okumamızı sağlar.
 app.use(express.json())//Buradaki işlem url deki data yı json formatına çevirir.
 
+app.use(methodOverride("_method",{
+    methods :["POST","GET"]
+}))//Post ve GET işlemlerini yakalayıp put ve delete işlemi yapma işlemi 
 
-app.get("/",async (req,res) => {
-    //Buradaki işlem sayesinde index.ejs sayfasına veri gönderme ve gönderdiğimiz isimle kullanabilmemize olanak sağlamaktadır.
-    const blog = await Blog.find({})
-    res.render("index",{blog})
-})
+//******** */
+app.get("/",blogController.getAllPost)
 
-app.get("/about",(req,res) => {
-    res.render("about")
-})
+app.get("/about",pageController.pageAbout)
 
-app.get("/addpost",(req,res) => {
-    res.render("add_post")
-})
+app.get("/addpost",pageController.pageAdd)
 
-app.get("/post/:id", async (req,res) => {
-    console.log(req.params.id)//Bu işlem snoucunda url de gelen id paramtre olarak almış oluruz.
-    const blog = await Blog.find({_id : req.params.id})//Bu işlemde ise arama işlemi yaparız.
-    res.render("post",{blog})//Bu işlem "post" sayfasına parametre olarak bulunan blog verilmiş olur.
-})
+app.get("/post/:id", blogController.getPost)
 //Burada add_post ile gönderilen işlemleri yakalama işlemi yapmaktayız.
 //Ayrıca ordaki tüm input değerlerine name parametresi mongoose-model ile belirtilen şekilde verilmelidir.
-app.post("/post",async (req,res) => {
-    console.log(req.body)
-    await Blog.create(req.body)
-    res.redirect("/")
-})
+app.post("/post/",blogController.addPost)
+
+app.put("/post/:id",blogController.updatePostController)
+
+app.get("/update/:id",blogController.updatePost)
+
+app.delete("/post/:id",blogController.deletePost)
 
 
 const port = 3000
